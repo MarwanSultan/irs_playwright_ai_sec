@@ -1,4 +1,4 @@
-import { expect, test } from './irs.fixture';
+import { expect, test } from '../fixtures/irs.fixture';
 
 test.describe('Refund Status', () => {
   test('refund tool loads and shows input fields', async ({ page }) => {

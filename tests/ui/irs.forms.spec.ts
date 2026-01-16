@@ -1,4 +1,4 @@
-import { expect, test } from './irs.fixture';
+import { expect, test } from '../fixtures/irs.fixture';
 
 test.describe('Forms & Publications', () => {
   test('can find and open Form 1040', async ({ page }) => {

@@ -1,4 +1,4 @@
-import { expect, test } from './irs.fixture';
+import { expect, test } from '../fixtures/irs.fixture';
 
 const queries = ['Form 1040', 'refund', 'EIN'];
 

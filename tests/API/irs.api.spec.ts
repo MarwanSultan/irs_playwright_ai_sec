@@ -1,4 +1,4 @@
-import { expect, test } from './irs.fixture';
+import { expect, test } from '@playwright/test';
 
 test.describe('API / HTTP checks', () => {
   test('public pages respond with 2xx', async ({ request }) => {

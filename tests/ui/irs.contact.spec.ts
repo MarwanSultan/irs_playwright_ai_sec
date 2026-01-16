@@ -1,4 +1,4 @@
-import { expect, test } from './irs.fixture';
+import { expect, test } from '../fixtures/irs.fixture';
 
 test.describe('Contact and Help', () => {
   test('contact page and locator work', async ({ page }) => {
