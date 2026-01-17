@@ -39,6 +39,9 @@ export default defineConfig({
     /* Record videos on first retry to investigate flakes. */
     video: 'on-first-retry',
     /* Slow down local runs a bit to help with debugging flakiness (disabled on CI). */
+    headless: true,
+    /*Execute tests in headless mode.*/
+
     launchOptions: {
       slowMo: process.env.CI ? 0 : 40,
     },
