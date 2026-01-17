@@ -1,25 +1,78 @@
 # IRS Playwright Test Suite
 
-Concise Playwright test suite for smoke, functional, API and performance checks targeting https://www.irs.gov.
+A production‑style **Playwright test automation framework** demonstrating how to design, structure, and run **UI, API, performance, and security‑aware tests** for a real‑world government web application (**[https://www.irs.gov](https://www.irs.gov)**).
 
-Overview
-- Tests are written in TypeScript using Playwright Test runner.
-- Tests are grouped into `tests/ui`, `tests/API`, and `tests/perf` with shared fixtures in `tests/fixtures`.
+This project is intentionally built as a **portfolio and reference framework** to showcase modern QA automation best practices, clean test architecture, CI/CD integration, and security considerations aligned with enterprise and federal environments.
 
-Quickstart
-1. Install dependencies:
+---
+
+## 🎯 Project Objective
+
+The goal of this project is to demonstrate how a Senior/Principal‑level QA Automation Engineer designs a scalable, maintainable, and security‑aware test framework — not just how to write individual tests.
+
+This repository showcases:
+
+* Clear separation of **UI, API, and performance testing** concerns
+* Reusable **fixtures and shared setup** patterns
+* **CI/CD automation** with GitHub Actions
+* Built‑in **security and dependency scanning**
+* Practical testing strategies suitable for **government and regulated systems**
+
+---
+
+## 🧪 Test Coverage
+
+### UI Tests (`tests/ui`)
+
+* Validate critical user‑facing flows and page behavior
+* Emphasize accessibility‑friendly and resilient selectors (roles, aria labels)
+* Avoid brittle assertions tied to exact text or page titles
+
+### API Tests (`tests/API`)
+
+* Validate backend responses and service availability
+* Isolate API checks from UI flows to reduce execution time and flakiness
+
+### Performance Tests (`tests/perf`)
+
+* Capture basic performance metrics and response timing
+* Generate JSON artifacts for aggregation and trend analysis
+
+---
+
+## 🧱 Project Structure
+
+```
+tests/
+ ├── ui        # UI / functional tests
+ ├── API       # API validation tests
+ ├── perf      # Performance checks
+ └── fixtures  # Shared Playwright fixtures
+```
+
+### Fixtures
+
+* **Canonical fixture:** `tests/fixtures/irs.fixture.ts`
+* Automatically navigates to `https://www.irs.gov` before each test
+* Ensures a consistent and predictable starting state across test suites
+
+---
+
+## ⚡ Quickstart
+
+### Install dependencies
 
 ```bash
 npm ci
 ```
 
-2. Run all tests locally:
+### Run all tests
 
 ```bash
 npx playwright test
 ```
 
-3. Run a subset:
+### Run a subset of tests
 
 ```bash
 npx playwright test tests/ui
@@ -27,26 +80,96 @@ npx playwright test tests/API
 npx playwright test tests/perf
 ```
 
-Fixtures
-- Canonical fixture: `tests/fixtures/irs.fixture.ts` — overrides `page` to navigate to `https://www.irs.gov` before each test.
+---
 
-CI / GitHub Actions
-- The repository includes a GitHub Actions workflow to run dependency audits, CodeQL, and Playwright tests with artifact uploads and optional ZAP scanning.
-- Configure secret `ZAP_TARGET_URL` to enable the OWASP ZAP job in CI.
+## 🔐 Security & Quality Controls
 
-Best practices
-- Keep `tests/ui` focused on user-facing flows; keep API checks in `tests/API` and long-running perf checks in `tests/perf`.
-- Use the canonical fixture for consistent startup state.
-- Prefer resilient selectors (roles, aria labels); avoid brittle exact-title assertions.
-- Use `test.skip` for migrated files during reorgs to avoid duplicate runs.
+This framework intentionally includes **security‑focused automation** to reflect real enterprise QA expectations.
 
-Reporting and artifacts
-- Playwright HTML report generated to `playwright-report/` after runs.
-- Performance JSON artifacts are aggregated by `scripts/aggregate_perf.js` into a perf summary.
+### Implemented Security Measures
 
-Contributing
-- Add new tests under the appropriate directory and update `spec/irs.core.testplan.md`.
-- Run `npx playwright test <path>` locally before submitting PRs.
+* **Dependency vulnerability scanning** via GitHub Actions
+* **CodeQL static analysis** for code quality and security issues
+* **Optional OWASP ZAP scanning** to detect common web vulnerabilities
 
-Contact
-- For repo-level questions, open an issue.
+To enable ZAP scanning in CI:
+
+* Configure the GitHub secret:
+
+  ```
+  ZAP_TARGET_URL=https://www.irs.gov
+  ```
+
+These controls ensure that automation quality extends beyond functional correctness into **security and risk awareness**.
+
+---
+
+## 🔄 CI / GitHub Actions
+
+The repository includes a GitHub Actions workflow that:
+
+* Runs dependency audits
+* Executes CodeQL analysis
+* Runs Playwright tests headlessly
+* Uploads Playwright HTML reports and artifacts
+* Optionally runs OWASP ZAP security scans
+
+This mirrors CI pipelines commonly used in **federal, financial, and regulated environments**.
+
+---
+
+## 📊 Reporting & Artifacts
+
+* **Playwright HTML Report** generated after each run
+* Output location:
+
+  ```
+  playwright-report/
+  ```
+* Performance JSON artifacts are aggregated via:
+
+  ```
+  scripts/aggregate_perf.js
+  ```
+
+---
+
+## 🧠 Best Practices Demonstrated
+
+* Clear separation of test concerns (UI vs API vs performance)
+* Reusable fixtures for consistent setup and teardown
+* Resilient selectors to reduce flakiness
+* Avoidance of brittle assertions
+* Strategic use of `test.skip` during refactors or test migrations
+* CI‑first mindset with security built into the pipeline
+
+---
+
+## 🤝 Contributing
+
+* Add new tests under the appropriate directory
+* Update `spec/irs.core.testplan.md` when introducing new coverage
+* Run targeted tests locally before submitting PRs:
+
+  ```bash
+  npx playwright test <path>
+  ```
+
+---
+
+## 📌 Why This Project Matters
+
+This repository is designed to demonstrate **how automation should scale**, not just how it runs.
+
+It reflects:
+
+* Real‑world QA automation architecture
+* Enterprise CI/CD expectations
+* Security‑aware testing practices
+* Maintainability and clarity over test volume
+
+---
+
+## 📬 Contact
+
+For repository‑level questions or suggestions, please open an issue.
