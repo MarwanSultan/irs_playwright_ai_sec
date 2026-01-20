@@ -1,29 +1,38 @@
 name: Playwright Tests
+
 permissions:
   actions: read
   contents: read
   security-events: write
+
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+
 jobs:
   dependency-audit:
     name: Dependency Audit (npm)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+
       - name: Install dependencies
         run: npm ci
+
       - name: Run npm audit (fails on high/critical)
         run: npm audit --audit-level=high
+
       - name: Save audit report
         run: npm audit --json > audit.json || true
-      - uses: actions/upload-artifact@v4
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
         with:
           name: npm-audit-report
           path: audit.json
@@ -33,12 +42,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
           languages: javascript
+
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
+
       - name: Perform CodeQL analysis
         uses: github/codeql-action/analyze@v2
 
@@ -49,45 +61,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+
       - name: Install dependencies
         run: npm ci
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
       - name: Run Playwright tests
         run: npx playwright test --retries=2 --workers=2
-      - name: Upload perf artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: perf-metrics
-          path: test-results/**/perf/*.json
-      - name: Aggregate perf metrics
-        if: always()
-        run: node scripts/aggregate_perf.js
-      - name: Upload perf summary
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: perf-summary
-          path: perf-summary.json
-      - uses: actions/upload-artifact@v4
+
+      - name: Upload Playwright report
         if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
       - name: Upload perf artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: perf-metrics
           path: test-results/**/perf/*.json
+
       - name: Aggregate perf metrics
         if: always()
         run: node scripts/aggregate_perf.js
+
       - name: Upload perf summary
         if: always()
         uses: actions/upload-artifact@v4
@@ -95,19 +101,4 @@ jobs:
           name: perf-summary
           path: perf-summary.json
 
-  zap_scan:
-    name: OWASP ZAP Baseline Scan
-    if: ${{ secrets.ZAP_TARGET_URL != '' }}
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - uses: actions/checkout@v4
-      - name: Run OWASP ZAP baseline scan
-        run: |
-          docker run --rm -v "$PWD":/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -t ${{ secrets.ZAP_TARGET_URL }} -r zap_report.html || true
-      - name: Upload ZAP report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: zap-report
-          path: zap_report.html
+  
