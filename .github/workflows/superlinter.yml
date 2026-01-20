@@ -1,0 +1,42 @@
+name: "Super-Linter"
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+concurrency:
+  group: superlinter-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  super-lint:
+    name: Lint Code Base
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Super-Linter
+        uses: github/super-linter@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BRANCH: main
+          VALIDATE_ALL_CODEBASE: false
+          # Enable common validators for this repo
+          VALIDATE_JS: true
+          VALIDATE_TS: true
+          VALIDATE_MD: true
+          VALIDATE_YAML: true
+          VALIDATE_SH: true
+          VALIDATE_DOCKERFILE: true
+          VALIDATE_JSON: true
+          FAIL_ON_ERROR: true
+          # Exclude large/generated folders to keep linting fast
+          FILTER_REGEX_EXCLUDE: '(^\\.github/|^node_modules/|^playwright-report/|^test-results/|^tests/perf/|^tests/ui/|^specs/)'
