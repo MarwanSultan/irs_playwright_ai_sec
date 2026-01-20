@@ -1,0 +1,14 @@
+exclude:
+  - .github
+  - node_modules
+  - playwright-report
+  - test-results
+  - tests/perf
+  - tests/ui
+  - specs
+  - scripts
+  - tests/fixtures
+
+# You can add specific linter disables here if needed, for example:
+# disable:
+#   - markdownlint
