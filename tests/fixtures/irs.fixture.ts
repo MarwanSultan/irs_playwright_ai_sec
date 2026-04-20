@@ -1,13 +1,11 @@
-import { test as base, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
-export const test = base.extend({
-  page: async ({ browser }, use) => {
-    const context = await browser.newContext();
-    const page: Page = await context.newPage();
-    await page.goto('https://www.irs.gov');
-    await use(page);
-    await context.close();
-  },
+test.beforeEach(async ({ page }) => {
+  await page.goto('/', { waitUntil: 'networkidle' });
 });
 
-export const expect = test.expect;
+test.afterAll(async () => {
+  console.log('Test execution completed. Closing browsers.');
+});
+
+export { test, expect };
